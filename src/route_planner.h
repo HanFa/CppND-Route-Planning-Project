@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <queue>
 #include "route_model.h"
 
 
@@ -22,7 +23,14 @@ class RoutePlanner {
 
   private:
     // Add private variables or methods declarations here.
-    std::vector<RouteModel::Node*> open_list;
+    class NodeComparator {
+    public:
+        bool operator() (const RouteModel::Node * n1, const RouteModel::Node * n2 ) {
+            return (n1->g_value + n1->h_value) > (n2->g_value + n2->h_value);
+        }
+    };
+
+    std::priority_queue<RouteModel::Node*, std::vector<RouteModel::Node*>, NodeComparator> open_list;
     RouteModel::Node *start_node;
     RouteModel::Node *end_node;
 
